@@ -1,2 +1,2 @@
 # zealot
-DEFinitive programming language
+DEFinitive interpreted programming language
