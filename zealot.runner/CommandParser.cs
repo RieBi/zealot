@@ -9,7 +9,7 @@ internal class CommandParser
     public CommandDetails ParseInput(string[] args)
     {
         if (args.Length == 0 || args.Length > 2)
-            throw new InvalidOperationException($"Excepted number of arguments: 1-2. Got: {args.Length}");
+            throw new InvalidOperationException($"Expected number of arguments: 1-2. Got: {args.Length}");
 
         string? fileName = null;
         bool interactiveMode = false;
