@@ -4,6 +4,9 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Console.WriteLine($"Total args: {args.Length}");
+        Console.WriteLine(string.Join('\n', args));
+
+        Console.WriteLine($"Working directory: {Environment.CurrentDirectory}");
     }
 }
