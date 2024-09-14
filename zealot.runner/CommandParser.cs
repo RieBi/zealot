@@ -1,12 +1,12 @@
 ﻿namespace zealot.runner;
-internal class CommandParser
+internal static class CommandParser
 {
     /// <summary>
     /// Parses command-line arguments and returns an object containing information about them.
     /// </summary>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException">Invalid filepath or argument.</exception>
-    public CommandDetails ParseInput(string[] args)
+    public static CommandDetails ParseInput(string[] args)
     {
         if (args.Length == 0 || args.Length > 2)
             throw new InvalidOperationException($"Expected number of arguments: 1-2. Got: {args.Length}");

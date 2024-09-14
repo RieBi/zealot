@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\zealot.interpreter\zealot.interpreter.csproj" />
+  </ItemGroup>
+
 </Project>

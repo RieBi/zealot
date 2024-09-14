@@ -1,12 +1,19 @@
-﻿namespace zealot.runner;
+﻿using zealot.interpreter;
+using zealot.runner.Runners;
 
-internal class Program
+namespace zealot.runner;
+
+internal static class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine($"Total args: {args.Length}");
-        Console.WriteLine(string.Join('\n', args));
+        var commandDetails = CommandParser.ParseInput(args);
+        var interpreter = new Interpreter();
 
-        Console.WriteLine($"Working directory: {Environment.CurrentDirectory}");
+        if (commandDetails.FileName is not null)
+        {
+            var fileRunner = new FileRunner(commandDetails.FileName, interpreter);
+            fileRunner.Run();
+        }
     }
 }
