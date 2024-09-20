@@ -5,6 +5,6 @@ internal class Token
 
     public Token(TokenKind kind, string value) => (Kind, Value) = (kind, value);
 
-    public required TokenKind Kind { get; set; }
-    public required string Value { get; set; }
+    public TokenKind Kind { get; set; }
+    public string Value { get; set; }
 }
