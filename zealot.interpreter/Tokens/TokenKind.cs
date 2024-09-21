@@ -135,4 +135,9 @@ internal enum TokenKind
     /// Represents a sequence of one or more tab \t characters
     /// </summary>
     Indentation,
+
+    /// <summary>
+    /// Represents end of line. Does not represent \n (new line) symbol
+    /// </summary>
+    EndOfLine,
 }
