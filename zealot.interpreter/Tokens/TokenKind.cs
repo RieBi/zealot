@@ -130,4 +130,9 @@ internal enum TokenKind
     /// Represents an identifier for a variable or function, consisting of A-Za-z0-9_- symbols. Can only start with a letter or underscore
     /// </summary>
     Identifier,
+
+    /// <summary>
+    /// Represents a sequence of one or more tab \t characters
+    /// </summary>
+    Indentation,
 }

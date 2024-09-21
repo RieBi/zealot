@@ -39,6 +39,7 @@ internal static partial class Tokenizer
                 "," => TokenKind.CommaSeparator,
                 "<" => TokenKind.LessThanOperator,
                 ">" => TokenKind.GreaterThanOperator,
+                _ when m.Name == "indentation" => TokenKind.Indentation,
                 _ when m.Name == "integer" => TokenKind.ConstantNumberInteger,
                 _ when m.Name == "double" => TokenKind.ConstantNumberDouble,
                 _ when m.Name == "identifier" => TokenKind.Identifier,
