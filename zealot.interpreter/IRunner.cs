@@ -6,4 +6,6 @@ public interface IRunner
     /// </summary>
     /// <returns></returns>
     string GetNextLine();
+
+    void Run();
 }

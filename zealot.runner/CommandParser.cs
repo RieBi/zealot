@@ -15,7 +15,7 @@ internal static class CommandParser
         bool interactiveMode = false;
 
         var invalidCharsSet = Path.GetInvalidFileNameChars().ToHashSet();
-        if (!args[0].Any(f => invalidCharsSet.Contains(f)))
+        if (args[0] != "-i" && !args[0].Any(f => invalidCharsSet.Contains(f)))
             fileName = args[0];
         else if (args[0] != "-i")
             throw new InvalidOperationException($"Unknown argument: {args[0]}");

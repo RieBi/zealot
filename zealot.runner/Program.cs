@@ -15,5 +15,11 @@ internal static class Program
             var fileRunner = new FileRunner(commandDetails.FileName, interpreter);
             fileRunner.Run();
         }
+
+        if (commandDetails.IsInteractiveMode)
+        {
+            var consoleRunner = new ConsoleRunner(interpreter);
+            consoleRunner.Run();
+        }
     }
 }

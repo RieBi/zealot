@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "zealot.runner": {
+      "commandName": "Project",
+      "commandLineArgs": "-i"
+    }
+  }
+}
