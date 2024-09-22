@@ -1,7 +1,7 @@
 ﻿using Zealot.Interpreter;
 
 namespace Zealot.Runner.Runners;
-internal class FileRunner(string fileName, Interpreter.Interpreter interpreter) : IRunner, IDisposable
+public class FileRunner(string fileName, Interpreter.Interpreter interpreter) : IRunner, IDisposable
 {
 	private readonly StreamReader _stream = new(fileName);
     private readonly Interpreter.Interpreter _interpreter = interpreter;

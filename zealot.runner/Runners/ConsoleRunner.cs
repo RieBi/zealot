@@ -1,7 +1,7 @@
 ﻿using Zealot.Interpreter;
 
 namespace Zealot.Runner.Runners;
-internal class ConsoleRunner(Interpreter.Interpreter interpreter) : IRunner
+public class ConsoleRunner(Interpreter.Interpreter interpreter) : IRunner
 {
     private readonly Interpreter.Interpreter _interpreter = interpreter;
 
