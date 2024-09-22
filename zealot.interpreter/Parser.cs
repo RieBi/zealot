@@ -1,5 +1,4 @@
 ﻿using Zealot.Interpreter.Ast.Nodes;
-using Zealot.Interpreter.Ast.Nodes;
 using Zealot.Interpreter.Ast.Types;
 using Zealot.Interpreter.Tokens;
 
@@ -23,15 +22,28 @@ internal class Parser(List<Token> tokens)
         throw new InvalidOperationException("Invalid constant number detected.");
     }
 
+    public AbstractNode ParseUnaryMinus()
+    {
+        if (IsAt(TokenKind.SubtractionOperator))
+        {
+            Next();
+
+            var right = ParseConstantNumber();
+            return new UnaryMinusNode(right);
+        }
+
+        return ParseConstantNumber();
+    }
+
     public AbstractNode ParseAdditionOperator()
     {
-        AbstractNode left = ParseConstantNumber();
+        AbstractNode left = ParseUnaryMinus();
 
         while (IsAt(TokenKind.AdditionOperator) || IsAt(TokenKind.SubtractionOperator))
         {
             var token = Next();
 
-            var right = ParseConstantNumber();
+            var right = ParseUnaryMinus();
             left = new BinaryOperatorNode(left, right, token.Kind);
         }
 
