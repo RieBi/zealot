@@ -54,6 +54,6 @@ internal static partial class Tokenizer
 
     public static bool HasNonEmptyGroup(this Match match, string groupName) => match.Groups.TryGetValue(groupName, out var group) && group.Length > 0;
 
-    [GeneratedRegex(@"def|define|repeat|\+=|-=|\*=|/=|\$=|[+\-*/$=()"",<>]|(?<integer>[0-9]+)|(?<double>[0-9]+(\.[0-9])?(e[0-9]+)?)|[a-zA-Z_][a-zA-Z0-9_\-]*")]
+    [GeneratedRegex(@"def|define|repeat|\+=|-=|\*=|/=|\$=|[+\-*/$=()"",<>]|(?<double>[0-9]+(?:\.[0-9]+)?(?:e[+-]?[[0-9]+)?)|(?<integer>[0-9]+)|[a-zA-Z_][a-zA-Z0-9_\-]*")]
     private static partial Regex TokenRegex();
 }

@@ -23,6 +23,7 @@ internal class Parser(List<Token> tokens)
         {
             var token = Next();
             var info = new TypeInfo("double", double.Parse(token.Value));
+            return new(info);
         }
 
         throw new InvalidOperationException("Invalid constant number detected.");
