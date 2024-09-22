@@ -5,11 +5,7 @@ internal class FileRunner(string fileName, Interpreter interpreter) : IRunner, I
 {
 	private readonly StreamReader _stream = new(fileName);
     private readonly Interpreter _interpreter = interpreter;
-
-    public void Dispose()
-    {
-        _stream.Dispose();
-    }
+    private bool _disposed;
 
     public void Run()
     {
@@ -25,5 +21,27 @@ internal class FileRunner(string fileName, Interpreter interpreter) : IRunner, I
     public string GetNextLine()
     {
         return _stream.ReadLine() ?? throw new InvalidOperationException("Unexpected end of file.");
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            _stream.Dispose();
+            _disposed = true;
+        }
+    }
+
+    ~FileRunner()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        Dispose(disposing: false);
+    }
+
+    public void Dispose()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }
