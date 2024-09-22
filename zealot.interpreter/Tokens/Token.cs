@@ -1,4 +1,4 @@
-﻿namespace zealot.interpreter.Tokens;
+﻿namespace Zealot.Interpreter.Tokens;
 internal class Token
 {
     public Token(TokenKind kind, string value) => (Kind, Value) = (kind, value);

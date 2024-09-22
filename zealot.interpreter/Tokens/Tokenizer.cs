@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace zealot.interpreter.Tokens;
+namespace Zealot.Interpreter.Tokens;
 internal static partial class Tokenizer
 {
     /// <summary>

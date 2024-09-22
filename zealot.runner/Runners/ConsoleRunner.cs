@@ -1,9 +1,9 @@
-﻿using zealot.interpreter;
+﻿using Zealot.Interpreter;
 
-namespace zealot.runner.Runners;
-internal class ConsoleRunner(Interpreter interpreter) : IRunner
+namespace Zealot.Runner.Runners;
+internal class ConsoleRunner(Interpreter.Interpreter interpreter) : IRunner
 {
-    private readonly Interpreter _interpreter = interpreter;
+    private readonly Interpreter.Interpreter _interpreter = interpreter;
 
     public void Run()
     {

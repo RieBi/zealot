@@ -1,4 +1,4 @@
-﻿namespace zealot.runner;
+﻿namespace Zealot.Runner;
 internal static class CommandParser
 {
     /// <summary>

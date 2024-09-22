@@ -1,4 +1,4 @@
-﻿namespace zealot.interpreter;
+﻿namespace Zealot.Interpreter;
 public interface IRunner
 {
     /// <summary>

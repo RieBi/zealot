@@ -1,4 +1,4 @@
-﻿namespace zealot.interpreter.Tokens;
+﻿namespace Zealot.Interpreter.Tokens;
 internal enum TokenKind
 {
     /// <summary>

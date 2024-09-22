@@ -1,14 +1,14 @@
-﻿using zealot.interpreter;
-using zealot.runner.Runners;
+﻿using Zealot.Interpreter;
+using Zealot.Runner.Runners;
 
-namespace zealot.runner;
+namespace Zealot.Runner;
 
 internal static class Program
 {
     static void Main(string[] args)
     {
         var commandDetails = CommandParser.ParseInput(args);
-        var interpreter = new Interpreter();
+        var interpreter = new Interpreter.Interpreter();
 
         if (commandDetails.FileName is not null)
         {

@@ -1,7 +1,7 @@
-﻿using zealot.interpreter.Ast.State;
-using zealot.interpreter.Tokens;
+﻿using Zealot.Interpreter.Ast.State;
+using Zealot.Interpreter.Tokens;
 
-namespace zealot.interpreter;
+namespace Zealot.Interpreter;
 public class Interpreter
 {
     private readonly Scope _internalScope = new();

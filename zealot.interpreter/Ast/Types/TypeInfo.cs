@@ -1,4 +1,4 @@
-﻿namespace zealot.interpreter.Ast.Types;
+﻿namespace Zealot.Interpreter.Ast.Types;
 internal class TypeInfo
 {
     public string Name { get; set; }

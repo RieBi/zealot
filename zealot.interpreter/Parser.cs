@@ -1,9 +1,9 @@
 ﻿using System.Numerics;
-using zealot.interpreter.Ast.Nodes;
-using zealot.interpreter.Ast.Types;
-using zealot.interpreter.Tokens;
+using Zealot.Interpreter.Ast.Nodes;
+using Zealot.Interpreter.Ast.Types;
+using Zealot.Interpreter.Tokens;
 
-namespace zealot.interpreter;
+namespace Zealot.Interpreter;
 internal class Parser(List<Token> tokens)
 {
     private readonly List<Token> _tokens = tokens;

@@ -1,7 +1,7 @@
-﻿using zealot.interpreter.Ast.State;
-using zealot.interpreter.Ast.Types;
+﻿using Zealot.Interpreter.Ast.State;
+using Zealot.Interpreter.Ast.Types;
 
-namespace zealot.interpreter.Ast.Nodes;
+namespace Zealot.Interpreter.Ast.Nodes;
 internal abstract class AbstractNode
 {
     public abstract TypeInfo Evaluate(Scope scope);

@@ -1,10 +1,10 @@
-﻿using zealot.interpreter;
+﻿using Zealot.Interpreter;
 
-namespace zealot.runner.Runners;
-internal class FileRunner(string fileName, Interpreter interpreter) : IRunner, IDisposable
+namespace Zealot.Runner.Runners;
+internal class FileRunner(string fileName, Interpreter.Interpreter interpreter) : IRunner, IDisposable
 {
 	private readonly StreamReader _stream = new(fileName);
-    private readonly Interpreter _interpreter = interpreter;
+    private readonly Interpreter.Interpreter _interpreter = interpreter;
     private bool _disposed;
 
     public void Run()
