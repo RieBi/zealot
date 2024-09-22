@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zealot.interpreter", "zealot.interpreter\zealot.interpreter.csproj", "{DF9A47B1-D759-4598-A7D6-7CA4D6E60F95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zealot.interpreter", "zealot.interpreter\zealot.interpreter.csproj", "{DF9A47B1-D759-4598-A7D6-7CA4D6E60F95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zealot.runner", "zealot.runner\zealot.runner.csproj", "{7A1D7909-9EFA-4E9C-BC13-31AE846B26A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zealot.runner", "zealot.runner\zealot.runner.csproj", "{7A1D7909-9EFA-4E9C-BC13-31AE846B26A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zealot.tests", "zealot.tests\zealot.tests.csproj", "{8D0BAE04-6B1C-43E5-9FB4-40124000AFD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{7A1D7909-9EFA-4E9C-BC13-31AE846B26A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A1D7909-9EFA-4E9C-BC13-31AE846B26A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A1D7909-9EFA-4E9C-BC13-31AE846B26A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D0BAE04-6B1C-43E5-9FB4-40124000AFD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D0BAE04-6B1C-43E5-9FB4-40124000AFD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D0BAE04-6B1C-43E5-9FB4-40124000AFD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D0BAE04-6B1C-43E5-9FB4-40124000AFD7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
