@@ -35,15 +35,30 @@ internal class Parser(List<Token> tokens)
         return ParseConstantNumber();
     }
 
-    public AbstractNode ParseAdditionOperator()
+    public AbstractNode ParseMultiplicationOperator()
     {
         AbstractNode left = ParseUnaryMinus();
+
+        while (IsAt(TokenKind.MultiplicationOperator) || IsAt(TokenKind.DivisionOperator))
+        {
+            var token = Next();
+
+            var right = ParseUnaryMinus();
+            left = new BinaryOperatorNode(left, right, token.Kind);
+        }
+
+        return left;
+    }
+
+    public AbstractNode ParseAdditionOperator()
+    {
+        AbstractNode left = ParseMultiplicationOperator();
 
         while (IsAt(TokenKind.AdditionOperator) || IsAt(TokenKind.SubtractionOperator))
         {
             var token = Next();
 
-            var right = ParseUnaryMinus();
+            var right = ParseMultiplicationOperator();
             left = new BinaryOperatorNode(left, right, token.Kind);
         }
 
