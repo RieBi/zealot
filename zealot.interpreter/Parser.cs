@@ -22,9 +22,23 @@ internal class Parser(List<Token> tokens)
         throw new InvalidOperationException("Invalid constant number detected.");
     }
 
+    public AbstractNode ParseParentheses()
+    {
+        if (IsAt(TokenKind.ParantheseOpen))
+        {
+            Next();
+            var expression = ParseLine();
+
+            Expect(TokenKind.ParantheseClosed);
+            return expression;
+        }
+
+        return ParseConstantNumber();
+    }
+
     public AbstractNode ParseExponentiationOperator()
     {
-        AbstractNode left = ParseConstantNumber();
+        AbstractNode left = ParseParentheses();
 
         while (IsAt(TokenKind.ExponentiationOperator))
         {
@@ -80,9 +94,35 @@ internal class Parser(List<Token> tokens)
         return left;
     }
 
+    /// <summary>
+    /// Returns the next token in the sequence.
+    /// </summary>
+    /// <returns></returns>
     private Token At() => _pos < _tokens.Count ? _tokens[_pos] : Token.EndOfLineToken;
 
+    /// <summary>
+    /// Determines whether the next token in the sequence is of type <paramref name="tokenKind"/>.
+    /// </summary>
+    /// <param name="tokenKind"></param>
+    /// <returns></returns>
     private bool IsAt(TokenKind tokenKind) => At().Kind == tokenKind;
 
+    /// <summary>
+    /// Advances from the current token to the next one and returns the current one (before advancing).
+    /// </summary>
+    /// <returns></returns>
     private Token Next() => _pos < _tokens.Count ? _tokens[_pos++] : Token.EndOfLineToken;
+
+    /// <summary>
+    /// Throws InvalidOperationException if the current token is not of type <paramref name="tokenKind"/>. Advances to the next token on success.
+    /// </summary>
+    /// <param name="tokenKind"></param>
+    /// <exception cref="InvalidOperationException"></exception>
+    private void Expect(TokenKind tokenKind)
+    {
+        if (!IsAt(tokenKind))
+            throw new InvalidOperationException($"Expected token: {tokenKind}. Got: {At()}");
+
+        Next();
+    }
 }
