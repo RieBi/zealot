@@ -96,8 +96,32 @@ public class RunnerTests
         };
     }
 
+    public static TheoryData<List<string>, List<string>> GetVariablesData()
+    {
+        return new()
+        {
+            {
+                ["def num = 1"],
+                ["1"]
+            },
+            {
+                ["def a = 1", "a + 2"],
+                ["1", "3"]
+            },
+            {
+                ["def a = 2", "def b = 3", "a + b + 1"],
+                ["2", "3", " 6"]
+            },
+            {
+                ["def a = 1", "a = 2", "a + 2", "a = 3", "a + 2"],
+                ["1", "2", "4", "3", "5"]
+            }
+        };
+    }
+
     [Theory]
     [MemberData(nameof(GetBasicOperationsData))]
+    [MemberData(nameof(GetVariablesData))]
     public void TestRunner(List<string> inputLines, List<string> outputs)
     {
         var str = new StringBuilder();
