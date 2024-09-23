@@ -7,6 +7,7 @@ public class RunnerTests
     {
         return new()
         {
+            // Constant numbers
             {
                 ["1"],
                 ["1"]
@@ -27,6 +28,7 @@ public class RunnerTests
                 ["1000e-3"],
                 ["1"]
             },
+            // Addition, subtraction
             {
                 ["2 + 5"],
                 ["7"]
@@ -43,6 +45,7 @@ public class RunnerTests
                 ["2.5+2.5"],
                 ["5"]
             },
+            // Unary minus
             {
                 ["-5 + 5"],
                 ["0"]
@@ -51,6 +54,7 @@ public class RunnerTests
                 ["-2 - -2"],
                 ["0"]
             },
+            // Multiplication, division
             {
                 ["2 + 2 * 2"],
                 ["6"]
@@ -62,7 +66,20 @@ public class RunnerTests
             {
                 ["1/2"],
                 ["0.5"]
-            }
+            },
+            // Exponentiation
+            {
+                ["2$3"],
+                ["8"]
+            },
+            {
+                ["0$0"],
+                ["1"]
+            },
+            {
+                ["2 $ 2 $ 3"],
+                ["256"]
+            },
         };
     }
 

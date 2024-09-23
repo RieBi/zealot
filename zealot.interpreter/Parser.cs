@@ -22,17 +22,32 @@ internal class Parser(List<Token> tokens)
         throw new InvalidOperationException("Invalid constant number detected.");
     }
 
+    public AbstractNode ParseExponentiationOperator()
+    {
+        AbstractNode left = ParseConstantNumber();
+
+        while (IsAt(TokenKind.ExponentiationOperator))
+        {
+            var token = Next();
+
+            var right = ParseExponentiationOperator();
+            left = new BinaryOperatorNode(left, right, token.Kind);
+        }
+
+        return left;
+    }
+
     public AbstractNode ParseUnaryMinus()
     {
         if (IsAt(TokenKind.SubtractionOperator))
         {
             Next();
 
-            var right = ParseConstantNumber();
+            var right = ParseExponentiationOperator();
             return new UnaryMinusNode(right);
         }
 
-        return ParseConstantNumber();
+        return ParseExponentiationOperator();
     }
 
     public AbstractNode ParseMultiplicationOperator()
