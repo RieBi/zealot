@@ -8,18 +8,24 @@ internal class Parser(List<Token> tokens)
     private readonly List<Token> _tokens = tokens;
     private int _pos = 0;
 
-    public AbstractNode ParseLine() => ParseAdditionOperator();
+    public AbstractNode ParseLine() => ParseVariableAssignment();
 
-    public ValueNode ParseConstantNumber()
+    public AbstractNode ParseBasicExpression()
     {
         if (IsAt(TokenKind.ConstantNumberInteger) || IsAt(TokenKind.ConstantNumberDouble))
         {
             var token = Next();
             var info = new TypeInfo("number", double.Parse(token.Value));
-            return new(info);
+            return new ValueNode(info);
+        }
+        else if (IsAt(TokenKind.Identifier))
+        {
+            var token = Next();
+            var identifier = new IdentifierNode(token.Value);
+            return identifier;
         }
         
-        throw new InvalidOperationException("Invalid constant number detected.");
+        throw new InvalidOperationException("Invalid basic expression detected.");
     }
 
     public AbstractNode ParseParentheses()
@@ -33,7 +39,7 @@ internal class Parser(List<Token> tokens)
             return expression;
         }
 
-        return ParseConstantNumber();
+        return ParseBasicExpression();
     }
 
     public AbstractNode ParseExponentiationOperator()
@@ -89,6 +95,42 @@ internal class Parser(List<Token> tokens)
 
             var right = ParseMultiplicationOperator();
             left = new BinaryOperatorNode(left, right, token.Kind);
+        }
+
+        return left;
+    }
+
+    public AbstractNode ParseVariableDefinition()
+    {
+        if (IsAt(TokenKind.VariableDefinition))
+        {
+            Next();
+
+            var identifier = ParseBasicExpression();
+            if (identifier is not IdentifierNode identifierNode)
+                throw new InvalidOperationException("Invalid name when defining a variable.");
+
+            Expect(TokenKind.AssignmentOperator);
+            var right = ParseAdditionOperator();
+
+            return new VariableDefinitionNode(identifierNode, right);
+        }
+
+        return ParseAdditionOperator();
+    }
+
+    public AbstractNode ParseVariableAssignment()
+    {
+        var left = ParseVariableDefinition();
+        if (IsAt(TokenKind.AssignmentOperator))
+        {
+            Next();
+
+            if (left is not IdentifierNode identifier)
+                throw new InvalidOperationException("Cannot assign a value to a non-variable.");
+
+            var right = ParseAdditionOperator();
+            return new AssignmentStatementNode(identifier, right);
         }
 
         return left;

@@ -41,7 +41,7 @@ internal static partial class Tokenizer
                 ">" => TokenKind.GreaterThanOperator,
                 _ when m.HasNonEmptyGroup("indentation") => TokenKind.Indentation,
                 _ when m.HasNonEmptyGroup("integer") => TokenKind.ConstantNumberInteger,
-                _ when m.HasNonEmptyGroup(groupName: "double") => TokenKind.ConstantNumberDouble,
+                _ when m.HasNonEmptyGroup("double") => TokenKind.ConstantNumberDouble,
                 _ when m.HasNonEmptyGroup("identifier") => TokenKind.Identifier,
                 _ => throw new InvalidOperationException("Unidentified token inspected.")
             };
@@ -54,6 +54,6 @@ internal static partial class Tokenizer
 
     public static bool HasNonEmptyGroup(this Match match, string groupName) => match.Groups.TryGetValue(groupName, out var group) && group.Length > 0;
 
-    [GeneratedRegex(@"def|define|repeat|\+=|-=|\*=|/=|\$=|[+\-*/$=()"",<>]|(?<double>[0-9]+(?:\.[0-9]+)?(?:e[+-]?[[0-9]+)?)|(?<integer>[0-9]+)|[a-zA-Z_][a-zA-Z0-9_\-]*")]
+    [GeneratedRegex(@"def|define|repeat|\+=|-=|\*=|/=|\$=|[+\-*/$=()"",<>]|(?<double>[0-9]+(?:\.[0-9]+)?(?:e[+-]?[[0-9]+)?)|(?<integer>[0-9]+)|(?<identifier>[a-zA-Z_][a-zA-Z0-9_\-]*)")]
     private static partial Regex TokenRegex();
 }
