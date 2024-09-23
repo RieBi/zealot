@@ -10,6 +10,9 @@ internal class AssignmentStatementNode(IdentifierNode variableName, AbstractNode
 
     public override TypeInfo Evaluate(Scope scope)
     {
+        if (!scope.HasVariable(VariableName.Identifier))
+            throw new InvalidOperationException($"Cannot reassign a nonexisting variable {VariableName.Identifier}.");
+
         var rightSideValue = RightSide.Evaluate(scope);
         scope.DefineVariable(VariableName.Identifier, rightSideValue, true);
 

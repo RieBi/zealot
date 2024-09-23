@@ -9,12 +9,19 @@ public class FileRunner(string fileName, Interpreter.Interpreter interpreter) : 
 
     public void Run()
     {
-        while (!_stream.EndOfStream)
+        try
         {
-            var line = _stream.ReadLine()!;
-            var result = _interpreter.InterpretLine(line, this);
-            if (result is not null)
-                Console.WriteLine(result);
+            while (!_stream.EndOfStream)
+            {
+                var line = _stream.ReadLine()!;
+                var result = _interpreter.InterpretLine(line, this);
+                if (result is not null)
+                    Console.WriteLine(result);
+            }
+        }
+        catch (Exception exc)
+        {
+            Console.WriteLine(exc);
         }
     }
 
