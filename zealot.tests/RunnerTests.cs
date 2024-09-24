@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Xunit.Sdk;
 
 namespace Zealot.Tests;
 public class RunnerTests
@@ -119,6 +120,51 @@ public class RunnerTests
         };
     }
 
+    public static TheoryData<string, List<string?>> GetFunctionsData()
+    {
+        return new()
+        {
+            {
+                """
+                define one =>
+                    1
+                """,
+                [null, null]
+            },
+            {
+                """
+                define culminate =>
+                    def a = 2
+                    def b = 3
+                    a + b
+                def r = culminate
+                r
+                """,
+                [null, null, null, null, "5", "5"]
+            },
+            {
+                """
+                define multiply(a, b) =>
+                    a * b
+
+                def result = multiply(7, 7)
+                result
+                """,
+                [null, null, null, "49", "49"]
+            },
+            {
+                """
+                def num = 1,
+                define echo(x) =>
+                    x
+
+                echo(num)
+                """,
+                ["1", null, null, null, "1"]
+            }
+        };
+    }
+
     [Theory]
     [MemberData(nameof(GetBasicOperationsData))]
     [MemberData(nameof(GetVariablesData))]
@@ -132,6 +178,22 @@ public class RunnerTests
         }
 
         var reader = new StringReader(str.ToString());
+        Console.SetIn(reader);
+
+        var writer = new StringWriter();
+        Console.SetOut(writer);
+
+        Runner.Program.Main(["-i"]);
+
+        var outputLines = writer.ToString().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+        Assert.Equal(outputs, outputLines);
+    }
+
+    [Theory]
+    [MemberData(nameof(GetFunctionsData))]
+    public void BlockTestRunner(string inputLines, List<string> outputs)
+    {
+        var reader = new StringReader(inputLines);
         Console.SetIn(reader);
 
         var writer = new StringWriter();
