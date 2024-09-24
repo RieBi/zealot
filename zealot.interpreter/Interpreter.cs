@@ -19,6 +19,8 @@ public class Interpreter
         var parser = new Parser(tokens);
         var resultNode = parser.ParseLine();
 
-        return resultNode.Evaluate(_internalScope).Value?.ToString();
+        var result = resultNode.Evaluate(_internalScope);
+
+        return result.Name == "empty" ? null : result.Value.ToString();
 	}
 }
