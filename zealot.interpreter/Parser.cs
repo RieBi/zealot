@@ -11,7 +11,7 @@ internal class Parser(List<Token> tokens, IRunner runner)
 
     public AbstractNode ParseLine()
     {
-        if (_tokens.Count == 0)
+        if (_tokens.Count == 0 || _tokens.Count == 1 && _tokens[0].Kind == TokenKind.Indentation)
             return new EmptyLineNode();
         else
             return ParseFunctionDefinition();
@@ -210,12 +210,12 @@ internal class Parser(List<Token> tokens, IRunner runner)
         if (curIndent == indentation)
             throw new InvalidOperationException("A block cannot start with the same indent level as its parent block.");
 
-        List<AbstractNode> blockLines = [ParseFunctionDefinition()];
+        List<AbstractNode> blockLines = [ParseLine()];
 
         while (true)
         {
             line = _runner.GetNextLine();
-            Reset(line);
+                Reset(line);
 
             if (!IsAt(TokenKind.Indentation) || At().Value != curIndent)
             {
@@ -224,7 +224,7 @@ internal class Parser(List<Token> tokens, IRunner runner)
             }
 
             Next();
-            blockLines.Add(ParseFunctionDefinition());
+            blockLines.Add(ParseLine());
         }
 
         return new(blockLines);

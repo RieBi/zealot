@@ -14,7 +14,7 @@ internal class AssignmentStatementNode(IdentifierNode variableName, AbstractNode
             throw new InvalidOperationException($"Cannot reassign a nonexisting variable {VariableName.Identifier}.");
 
         var rightSideValue = RightSide.Evaluate(scope);
-        scope.DefineVariable(VariableName.Identifier, rightSideValue, true);
+        scope.RedefineClosestVariable(VariableName.Identifier, rightSideValue);
 
         return rightSideValue;
     }

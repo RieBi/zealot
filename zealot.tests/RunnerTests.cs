@@ -161,6 +161,55 @@ public class RunnerTests
                 echo(num)
                 """,
                 ["1", "1"]
+            },
+            {
+                """
+                def num = 1,
+                define increase =>
+                    num = num + 1
+
+                increase()
+                num
+                """,
+                ["1", "2", "2"]
+            },
+            {
+                """
+                def num = 1,
+                define add3(x) =>
+                    def num = 3 + x
+                    num
+
+                add3(num)
+                num
+                """,
+                ["1", "4", "1"]
+            },
+            {
+                """
+                define rec1 =>
+                    def a = 1
+                    define rec2 =>
+                        def a = 2
+                        a
+                    
+                    a + rec2()
+
+                rec1()
+                """,
+                ["3"]
+            },
+            {
+                """
+                def a = 1
+                define func(a) =>
+                    a = a * 2
+                    a
+
+                func(a)
+                a
+                """,
+                ["1", "2", "1"]
             }
         };
     }
