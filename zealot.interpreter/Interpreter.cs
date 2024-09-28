@@ -4,7 +4,7 @@ using Zealot.Interpreter.Tokens;
 namespace Zealot.Interpreter;
 public class Interpreter
 {
-    private readonly Scope _internalScope = new();
+    private readonly Scope _internalScope = new(ScopeType.Global);
 
     /// <summary>
     /// Interprets the <paramref name="line"/> of code and returns returned result, if any.
@@ -16,7 +16,7 @@ public class Interpreter
 	{
         var tokens = Tokenizer.Tokenize(line);
 
-        var parser = new Parser(tokens);
+        var parser = new Parser(tokens, runner);
         var resultNode = parser.ParseLine();
 
         var result = resultNode.Evaluate(_internalScope);

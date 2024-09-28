@@ -16,13 +16,8 @@ internal static partial class Tokenizer
             var val = m.Value;
             TokenKind tokenKind = val switch
             {
-                "def" => TokenKind.VariableDefinition,
-                "define" => TokenKind.FunctionDefinition,
-                "repeat" => TokenKind.RepeatDefinition,
                 "=>" => TokenKind.BlockDefinitionOperator,
                 "=" => TokenKind.AssignmentOperator,
-                "false" => TokenKind.ConstantFalse,
-                "true" => TokenKind.ConstantTrue,
                 "+" => TokenKind.AdditionOperator,
                 "+=" => TokenKind.ShortAdditionOperator,
                 "-" => TokenKind.SubtractionOperator,
@@ -33,8 +28,8 @@ internal static partial class Tokenizer
                 "/=" => TokenKind.ShortDivisionOperator,
                 "$" => TokenKind.ExponentiationOperator,
                 "$=" => TokenKind.ShortExponentiationOperator,
-                "(" => TokenKind.ParantheseOpen,
-                ")" => TokenKind.ParantheseClosed,
+                "(" => TokenKind.ParentheseOpen,
+                ")" => TokenKind.ParentheseClosed,
                 "\"" => TokenKind.QuotationMarks,
                 "," => TokenKind.CommaSeparator,
                 "<" => TokenKind.LessThanOperator,
@@ -46,6 +41,19 @@ internal static partial class Tokenizer
                 _ => throw new InvalidOperationException("Unidentified token inspected.")
             };
 
+            if (tokenKind == TokenKind.Identifier)
+            {
+                tokenKind = val switch
+                {
+                    "def" => TokenKind.VariableDefinition,
+                    "define" => TokenKind.FunctionDefinition,
+                    "repeat" => TokenKind.RepeatDefinition,
+                    "false" => TokenKind.ConstantFalse,
+                    "true" => TokenKind.ConstantTrue,
+                    _ => tokenKind
+                };
+            }
+
             return new Token(tokenKind, val);
         });
 
@@ -54,6 +62,8 @@ internal static partial class Tokenizer
 
     public static bool HasNonEmptyGroup(this Match match, string groupName) => match.Groups.TryGetValue(groupName, out var group) && group.Length > 0;
 
-    [GeneratedRegex(@"def|define|repeat|\+=|-=|\*=|/=|\$=|[+\-*/$=()"",<>]|(?<double>[0-9]+(?:\.[0-9]+)?(?:e[+-]?[[0-9]+)?)|(?<integer>[0-9]+)|(?<identifier>[a-zA-Z_][a-zA-Z0-9_\-]*)")]
+    [GeneratedRegex(
+        @"(?<indentation>^[ \t]+)|\+=|-=|\*=|/=|\$=|=>|[+\-*/$=()"",<>]|(?<double>[0-9]+(?:\.[0-9]+)?(?:e[-+]?[0-9]+)?)|(?<integer>[0-9]+)|(?<identifier>[a-zA-Z_][a-zA-Z0-9_\-]*)"
+    )]
     private static partial Regex TokenRegex();
 }

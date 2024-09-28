@@ -1,19 +1,17 @@
-﻿using Zealot.Interpreter;
-
-namespace Zealot.Runner.Runners;
-public class FileRunner(string fileName, Interpreter.Interpreter interpreter) : IRunner, IDisposable
+﻿namespace Zealot.Runner.Runners;
+public class FileRunner(string fileName, Interpreter.Interpreter interpreter) : BaseRunner, IDisposable
 {
 	private readonly StreamReader _stream = new(fileName);
     private readonly Interpreter.Interpreter _interpreter = interpreter;
     private bool _disposed;
 
-    public void Run()
+    public override void Run()
     {
         try
         {
             while (!_stream.EndOfStream)
             {
-                var line = _stream.ReadLine()!;
+                var line = GetNextLine();
                 var result = _interpreter.InterpretLine(line, this);
                 if (result is not null)
                     Console.WriteLine(result);
@@ -25,7 +23,7 @@ public class FileRunner(string fileName, Interpreter.Interpreter interpreter) : 
         }
     }
 
-    public string GetNextLine()
+    protected override string GetNextLineInternal()
     {
         return _stream.ReadLine() ?? throw new InvalidOperationException("Unexpected end of file.");
     }

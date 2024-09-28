@@ -99,12 +99,12 @@ internal enum TokenKind
     /// <summary>
     /// Represents '(' symbol
     /// </summary>
-    ParantheseOpen,
+    ParentheseOpen,
 
     /// <summary>
     /// Represents ')' symbol
     /// </summary>
-    ParantheseClosed,
+    ParentheseClosed,
 
     /// <summary>
     /// Represents '"' symbol

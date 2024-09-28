@@ -7,5 +7,7 @@ public interface IRunner
     /// <returns></returns>
     string GetNextLine();
 
+    string ReturnPreviousLine();
+
     void Run();
 }

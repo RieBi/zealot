@@ -3,12 +3,19 @@ using Zealot.Interpreter.Ast.Types;
 using Zealot.Interpreter.Tokens;
 
 namespace Zealot.Interpreter;
-internal class Parser(List<Token> tokens)
+internal class Parser(List<Token> tokens, IRunner runner)
 {
-    private readonly List<Token> _tokens = tokens;
+    private List<Token> _tokens = tokens;
     private int _pos = 0;
+    private readonly IRunner _runner = runner;
 
-    public AbstractNode ParseLine() => ParseVariableAssignment();
+    public AbstractNode ParseLine()
+    {
+        if (_tokens.Count == 0)
+            return new EmptyLineNode();
+        else
+            return ParseFunctionDefinition();
+    }
 
     public AbstractNode ParseBasicExpression()
     {
@@ -28,18 +35,45 @@ internal class Parser(List<Token> tokens)
         throw new InvalidOperationException("Invalid basic expression detected.");
     }
 
+    public AbstractNode ParseFunctionCall()
+    {
+        var node = ParseBasicExpression();
+
+        if (node is IdentifierNode identifier && IsAt(TokenKind.ParentheseOpen))
+        {
+            Next();
+
+            List<AbstractNode> arguments = [];
+
+            while (!IsAt(TokenKind.ParentheseClosed))
+            {
+                var argument = ParseAdditionOperator();
+                arguments.Add(argument);
+
+                if (!IsAt(TokenKind.ParentheseClosed))
+                    Expect(TokenKind.CommaSeparator);
+            }
+
+            Expect(TokenKind.ParentheseClosed);
+
+            return new FunctionEvaluationNode(identifier.Identifier, arguments);
+        }
+
+        return node;
+    }
+
     public AbstractNode ParseParentheses()
     {
-        if (IsAt(TokenKind.ParantheseOpen))
+        if (IsAt(TokenKind.ParentheseOpen))
         {
             Next();
             var expression = ParseLine();
 
-            Expect(TokenKind.ParantheseClosed);
+            Expect(TokenKind.ParentheseClosed);
             return expression;
         }
 
-        return ParseBasicExpression();
+        return ParseFunctionCall();
     }
 
     public AbstractNode ParseExponentiationOperator()
@@ -136,6 +170,66 @@ internal class Parser(List<Token> tokens)
         return left;
     }
 
+    public AbstractNode ParseFunctionDefinition()
+    {
+        if (IsAt(TokenKind.FunctionDefinition))
+        {
+            Next();
+
+            var identifier = Expect(TokenKind.Identifier);
+            var parameters = new List<string>();
+
+            if (IsAt(TokenKind.ParentheseOpen))
+            {
+                Next();
+
+                while (IsAt(TokenKind.Identifier))
+                {
+                    parameters.Add(Next().Value);
+
+                    if (!IsAt(TokenKind.ParentheseClosed))
+                        Expect(TokenKind.CommaSeparator);
+                }
+
+                Expect(TokenKind.ParentheseClosed);
+            }
+
+            var block = ParseScopedBlock(string.Empty);
+            return new FunctionDefinitionNode(identifier.Value, parameters, block);
+        }
+
+        return ParseVariableAssignment();
+    }
+
+    public ScopedBlockNode ParseScopedBlock(string indentation)
+    {
+        var line = _runner.GetNextLine();
+        Reset(line);
+
+        var curIndent = Expect(TokenKind.Indentation).Value;
+        if (curIndent == indentation)
+            throw new InvalidOperationException("A block cannot start with the same indent level as its parent block.");
+
+        List<AbstractNode> blockLines = [ParseFunctionDefinition()];
+
+        while (true)
+        {
+            line = _runner.GetNextLine();
+            Reset(line);
+
+            if (!IsAt(TokenKind.Indentation) || At().Value != curIndent)
+            {
+                _runner.ReturnPreviousLine();
+                break;
+            }
+
+            Next();
+            blockLines.Add(ParseFunctionDefinition());
+        }
+
+        return new(blockLines);
+    }
+
     /// <summary>
     /// Returns the next token in the sequence.
     /// </summary>
@@ -156,15 +250,21 @@ internal class Parser(List<Token> tokens)
     private Token Next() => _pos < _tokens.Count ? _tokens[_pos++] : Token.EndOfLineToken;
 
     /// <summary>
-    /// Throws InvalidOperationException if the current token is not of type <paramref name="tokenKind"/>. Advances to the next token on success.
+    /// Throws InvalidOperationException if the current token is not of type <paramref name="tokenKind"/>. Returns the token and advances to the next one on success.
     /// </summary>
     /// <param name="tokenKind"></param>
     /// <exception cref="InvalidOperationException"></exception>
-    private void Expect(TokenKind tokenKind)
+    private Token Expect(TokenKind tokenKind)
     {
         if (!IsAt(tokenKind))
             throw new InvalidOperationException($"Expected token: {tokenKind}. Got: {At()}");
 
-        Next();
+        return Next();
+    }
+
+    private void Reset(string newLine)
+    {
+        _tokens = Tokenizer.Tokenize(newLine);
+        _pos = 0;
     }
 }

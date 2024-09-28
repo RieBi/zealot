@@ -120,7 +120,7 @@ public class RunnerTests
         };
     }
 
-    public static TheoryData<string, List<string?>> GetFunctionsData()
+    public static TheoryData<string, List<string>> GetFunctionsData()
     {
         return new()
         {
@@ -129,7 +129,7 @@ public class RunnerTests
                 define one =>
                     1
                 """,
-                [null, null]
+                []
             },
             {
                 """
@@ -137,10 +137,10 @@ public class RunnerTests
                     def a = 2
                     def b = 3
                     a + b
-                def r = culminate
+                def r = culminate()
                 r
                 """,
-                [null, null, null, null, "5", "5"]
+                ["5", "5"]
             },
             {
                 """
@@ -150,7 +150,7 @@ public class RunnerTests
                 def result = multiply(7, 7)
                 result
                 """,
-                [null, null, null, "49", "49"]
+                ["49", "49"]
             },
             {
                 """
@@ -160,7 +160,7 @@ public class RunnerTests
 
                 echo(num)
                 """,
-                ["1", null, null, null, "1"]
+                ["1", "1"]
             }
         };
     }

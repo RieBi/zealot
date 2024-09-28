@@ -1,19 +1,16 @@
-﻿using Zealot.Interpreter;
-
-namespace Zealot.Runner.Runners;
-public class ConsoleRunner(Interpreter.Interpreter interpreter) : IRunner
+﻿namespace Zealot.Runner.Runners;
+public class ConsoleRunner(Interpreter.Interpreter interpreter) : BaseRunner
 {
     private readonly Interpreter.Interpreter _interpreter = interpreter;
 
-    public void Run()
+    public override void Run()
     {
-        var stopString = char.MinValue.ToString();
         while (true)
         {
             try
             {
-                var line = Console.ReadLine();
-                if (line is null || line == stopString)
+                var line = GetNextLine();
+                if (line is null || line == _stopString)
                     break;
 
                 var result = _interpreter.InterpretLine(line, this);
@@ -33,5 +30,5 @@ public class ConsoleRunner(Interpreter.Interpreter interpreter) : IRunner
         }
     }
 
-    public string GetNextLine() => Console.ReadLine() ?? throw new InvalidOperationException("Input console stream is unexpectedly closed");
+    protected override string GetNextLineInternal() => Console.ReadLine() ?? _stopString;
 }
