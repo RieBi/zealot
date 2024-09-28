@@ -134,6 +134,36 @@ internal class Parser(List<Token> tokens, IRunner runner)
         return left;
     }
 
+    public AbstractNode ParseShorthandOperators()
+    {
+        var left = ParseAdditionOperator();
+
+        if (left is IdentifierNode identifier)
+        {
+            var at = At().Kind;
+
+            TokenKind? binaryOperator = at switch
+            {
+                TokenKind.ShortAdditionOperator => TokenKind.AdditionOperator,
+                TokenKind.ShortSubtractionOperator => TokenKind.SubtractionOperator,
+                TokenKind.ShortMultiplicationOperator => TokenKind.MultiplicationOperator,
+                TokenKind.ShortDivisionOperator => TokenKind.DivisionOperator,
+                TokenKind.ShortExponentiationOperator => TokenKind.ExponentiationOperator,
+                _ => null
+            };
+
+            if (binaryOperator is null)
+                return left;
+
+            Next();
+
+            var operatorNode = new BinaryOperatorNode(left, ParseAdditionOperator(), binaryOperator.Value);
+            return new AssignmentStatementNode(identifier, operatorNode);
+        }
+
+        return left;
+    }
+
     public AbstractNode ParseVariableDefinition()
     {
         if (IsAt(TokenKind.VariableDefinition))
@@ -150,7 +180,7 @@ internal class Parser(List<Token> tokens, IRunner runner)
             return new VariableDefinitionNode(identifierNode, right);
         }
 
-        return ParseAdditionOperator();
+        return ParseShorthandOperators();
     }
 
     public AbstractNode ParseVariableAssignment()

@@ -214,6 +214,24 @@ public class RunnerTests
         };
     }
 
+    public static TheoryData<string, List<string>> GetShorthandOperatorsData()
+    {
+        return new()
+        {
+            {
+                """
+                def a = 5
+                a += 1
+                a -= 1
+                a *= 5
+                a /= 5
+                a $= 3
+                """,
+                ["5", "6", "5", "25", "5", "125"]
+            }
+        };
+    }
+
     [Theory]
     [MemberData(nameof(GetBasicOperationsData))]
     [MemberData(nameof(GetVariablesData))]
@@ -240,6 +258,7 @@ public class RunnerTests
 
     [Theory]
     [MemberData(nameof(GetFunctionsData))]
+    [MemberData(nameof(GetShorthandOperatorsData))]
     public void BlockTestRunner(string inputLines, List<string> outputs)
     {
         var reader = new StringReader(inputLines);
