@@ -127,6 +127,26 @@ internal enum TokenKind
     GreaterThanOperator,
 
     /// <summary>
+    /// Represents '!' symbol
+    /// </summary>
+    LogicalNotOperator,
+
+    /// <summary>
+    /// Represents '&&' token
+    /// </summary>
+    LogicalAndOperator,
+
+    /// <summary>
+    /// Represents '^' token
+    /// </summary>
+    LogicalExclusiveOrOperator,
+
+    /// <summary>
+    /// Represents '||' token
+    /// </summary>
+    LogicalOrOperator,
+
+    /// <summary>
     /// Represents an identifier for a variable or function, consisting of A-Za-z0-9_- symbols. Can only start with a letter or underscore
     /// </summary>
     Identifier,

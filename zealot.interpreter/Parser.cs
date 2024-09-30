@@ -14,7 +14,13 @@ internal class Parser(List<Token> tokens, IRunner runner)
         if (_tokens.Count == 0 || _tokens.Count == 1 && _tokens[0].Kind == TokenKind.Indentation)
             return new EmptyLineNode();
         else
-            return ParseFunctionDefinition();
+        {
+            var result = ParseFunctionDefinition();
+            if (_pos < _tokens.Count)
+                throw new InvalidOperationException("Unused tokens detected at the end of line.");
+
+            return result;
+        }
     }
 
     public AbstractNode ParseBasicExpression()
@@ -23,6 +29,12 @@ internal class Parser(List<Token> tokens, IRunner runner)
         {
             var token = Next();
             var info = new TypeInfo("number", double.Parse(token.Value));
+            return new ValueNode(info);
+        }
+        else if (IsAt(TokenKind.ConstantFalse) || IsAt(TokenKind.ConstantTrue))
+        {
+            var token = Next();
+            var info = new TypeInfo("bool", token.Value == "true" ? BoolType.True : BoolType.False);
             return new ValueNode(info);
         }
         else if (IsAt(TokenKind.Identifier))
@@ -47,7 +59,7 @@ internal class Parser(List<Token> tokens, IRunner runner)
 
             while (!IsAt(TokenKind.ParentheseClosed))
             {
-                var argument = ParseAdditionOperator();
+                var argument = ParseExpression();
                 arguments.Add(argument);
 
                 if (!IsAt(TokenKind.ParentheseClosed))
@@ -67,7 +79,7 @@ internal class Parser(List<Token> tokens, IRunner runner)
         if (IsAt(TokenKind.ParentheseOpen))
         {
             Next();
-            var expression = ParseLine();
+            var expression = ParseExpression();
 
             Expect(TokenKind.ParentheseClosed);
             return expression;
@@ -97,7 +109,7 @@ internal class Parser(List<Token> tokens, IRunner runner)
         {
             Next();
 
-            var right = ParseExponentiationOperator();
+            var right = ParseParentheses();
             return new UnaryMinusNode(right);
         }
 
@@ -134,9 +146,39 @@ internal class Parser(List<Token> tokens, IRunner runner)
         return left;
     }
 
+    public AbstractNode ParseLogicalNotOperator()
+    {
+        if (IsAt(TokenKind.LogicalNotOperator))
+        {
+            Next();
+
+            var right = ParseParentheses();
+            return new UnaryLogicalNotNode(right);
+        }
+
+        return ParseAdditionOperator();
+    }
+
+    public AbstractNode ParseLogicalOperator()
+    {
+        var left = ParseLogicalNotOperator();
+
+        while (IsAt(TokenKind.LogicalAndOperator) || IsAt(TokenKind.LogicalExclusiveOrOperator) || IsAt(TokenKind.LogicalOrOperator))
+        {
+            var token = Next();
+
+            var right = ParseLogicalNotOperator();
+            left = new BinaryLogicalOperatorNode(left, right, token.Kind);
+        }
+
+        return left;
+    }
+
+    public AbstractNode ParseExpression() => ParseLogicalOperator();
+
     public AbstractNode ParseShorthandOperators()
     {
-        var left = ParseAdditionOperator();
+        var left = ParseLogicalOperator();
 
         if (left is IdentifierNode identifier)
         {
@@ -157,7 +199,7 @@ internal class Parser(List<Token> tokens, IRunner runner)
 
             Next();
 
-            var operatorNode = new BinaryArithmeticOperatorNode(left, ParseAdditionOperator(), binaryOperator.Value);
+            var operatorNode = new BinaryArithmeticOperatorNode(left, ParseExpression(), binaryOperator.Value);
             return new AssignmentStatementNode(identifier, operatorNode);
         }
 
@@ -175,7 +217,7 @@ internal class Parser(List<Token> tokens, IRunner runner)
                 throw new InvalidOperationException("Invalid name when defining a variable.");
 
             Expect(TokenKind.AssignmentOperator);
-            var right = ParseAdditionOperator();
+            var right = ParseExpression();
 
             return new VariableDefinitionNode(identifierNode, right);
         }
@@ -193,7 +235,7 @@ internal class Parser(List<Token> tokens, IRunner runner)
             if (left is not IdentifierNode identifier)
                 throw new InvalidOperationException("Cannot assign a value to a non-variable.");
 
-            var right = ParseAdditionOperator();
+            var right = ParseExpression();
             return new AssignmentStatementNode(identifier, right);
         }
 
@@ -245,11 +287,12 @@ internal class Parser(List<Token> tokens, IRunner runner)
         while (true)
         {
             line = _runner.GetNextLine();
-                Reset(line);
+            Reset(line);
 
             if (!IsAt(TokenKind.Indentation) || At().Value != curIndent)
             {
                 _runner.ReturnPreviousLine();
+                _pos = int.MaxValue;
                 break;
             }
 

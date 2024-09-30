@@ -154,7 +154,7 @@ public class RunnerTests
             },
             {
                 """
-                def num = 1,
+                def num = 1
                 define echo(x) =>
                     x
 
@@ -164,7 +164,7 @@ public class RunnerTests
             },
             {
                 """
-                def num = 1,
+                def num = 1
                 define increase =>
                     num = num + 1
 
@@ -175,7 +175,7 @@ public class RunnerTests
             },
             {
                 """
-                def num = 1,
+                def num = 1
                 define add3(x) =>
                     def num = 3 + x
                     num
