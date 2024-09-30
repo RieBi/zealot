@@ -232,6 +232,92 @@ public class RunnerTests
         };
     }
 
+    public static TheoryData<string, List<string>> GetLogicalOperatorsData()
+    {
+        return new()
+        {
+            {
+                "false",
+                ["false"]
+            },
+            {
+                "true",
+                ["true"]
+            },
+            {
+                """
+                !true
+                !false
+                """,
+                ["false", "true"]
+            },
+            {
+                """
+                true && true
+                true && false
+                false && true
+                false && false
+                """,
+                ["true", "false", "false", "false"]
+            },
+            {
+                """
+                true ^ true
+                true ^ false
+                false ^ true
+                false ^ false
+                """,
+                ["false", "true", "true", "false"]
+            },
+            {
+                """
+                true || true
+                true || false
+                false || true
+                false || false
+                """,
+                ["true", "true", "true", "false"]
+            },
+            {
+                """
+                def ran = 0
+
+                define increment =>
+                    ran += 1
+                    true
+
+                false && increment()
+                ran
+                true && increment()
+                ran
+                """,
+                ["0", "false", "0", "true", "1"]
+            },
+            {
+                """
+                def ran = 0
+
+                define increment =>
+                    ran += 1
+                    true
+
+                false || increment()
+                ran
+                true || increment()
+                ran
+                """,
+                ["0", "true", "1", "true", "1"]
+            },
+            {
+                """
+                false && false || true && true
+                !false && !true || !false && !false
+                """,
+                ["true", "true"]
+            }
+        };
+    }
+
     [Theory]
     [MemberData(nameof(GetBasicOperationsData))]
     [MemberData(nameof(GetVariablesData))]
@@ -259,6 +345,7 @@ public class RunnerTests
     [Theory]
     [MemberData(nameof(GetFunctionsData))]
     [MemberData(nameof(GetShorthandOperatorsData))]
+    [MemberData(nameof(GetLogicalOperatorsData))]
     public void BlockTestRunner(string inputLines, List<string> outputs)
     {
         var reader = new StringReader(inputLines);
