@@ -1,10 +1,9 @@
-﻿using Zealot.Interpreter.Ast.Nodes;
-using Zealot.Interpreter.Ast.State;
+﻿using Zealot.Interpreter.Ast.State;
 using Zealot.Interpreter.Ast.Types;
 using Zealot.Interpreter.Tokens;
 
 namespace Zealot.Interpreter.Ast.Nodes;
-internal class BinaryOperatorNode(AbstractNode left, AbstractNode right, TokenKind operatorKind) : AbstractNode
+internal class BinaryArithmeticOperatorNode(AbstractNode left, AbstractNode right, TokenKind operatorKind) : AbstractNode
 {
     public AbstractNode Left { get; set; } = left;
     public AbstractNode Right { get; set; } = right;

@@ -85,7 +85,7 @@ internal class Parser(List<Token> tokens, IRunner runner)
             var token = Next();
 
             var right = ParseExponentiationOperator();
-            left = new BinaryOperatorNode(left, right, token.Kind);
+            left = new BinaryArithmeticOperatorNode(left, right, token.Kind);
         }
 
         return left;
@@ -113,7 +113,7 @@ internal class Parser(List<Token> tokens, IRunner runner)
             var token = Next();
 
             var right = ParseUnaryMinus();
-            left = new BinaryOperatorNode(left, right, token.Kind);
+            left = new BinaryArithmeticOperatorNode(left, right, token.Kind);
         }
 
         return left;
@@ -128,7 +128,7 @@ internal class Parser(List<Token> tokens, IRunner runner)
             var token = Next();
 
             var right = ParseMultiplicationOperator();
-            left = new BinaryOperatorNode(left, right, token.Kind);
+            left = new BinaryArithmeticOperatorNode(left, right, token.Kind);
         }
 
         return left;
@@ -157,7 +157,7 @@ internal class Parser(List<Token> tokens, IRunner runner)
 
             Next();
 
-            var operatorNode = new BinaryOperatorNode(left, ParseAdditionOperator(), binaryOperator.Value);
+            var operatorNode = new BinaryArithmeticOperatorNode(left, ParseAdditionOperator(), binaryOperator.Value);
             return new AssignmentStatementNode(identifier, operatorNode);
         }
 
