@@ -318,6 +318,47 @@ public class RunnerTests
         };
     }
 
+    public static TheoryData<string, List<string>> GetRelationalOperatorsData()
+    {
+        return new()
+        {
+            {
+                """
+                1 < 2
+                2 < 1
+                2 > 1
+                1 > 2
+                1 <= 1
+                2 <= 1
+                2 >= 2
+                1 >= 2
+                """,
+                ["true", "false", "true", "false", "true", "false", "true", "false"]
+            },
+            {
+                """
+                1 == 1
+                2 == 1
+                1 != 2
+                1 != 1
+                true == true
+                true == false
+                true != false
+                true != true
+                """,
+                ["true", "false", "true", "false", "true", "false", "true", "false"]
+            },
+            {
+                """
+                2 > 1 == 5 > 4
+                1 > 1 != 1 >= 1
+                true && false == true || false
+                """,
+                ["true", "true", "false"]
+            }
+        };
+    }
+
     [Theory]
     [MemberData(nameof(GetBasicOperationsData))]
     [MemberData(nameof(GetVariablesData))]
@@ -346,6 +387,7 @@ public class RunnerTests
     [MemberData(nameof(GetFunctionsData))]
     [MemberData(nameof(GetShorthandOperatorsData))]
     [MemberData(nameof(GetLogicalOperatorsData))]
+    [MemberData(nameof(GetRelationalOperatorsData))]
     public void BlockTestRunner(string inputLines, List<string> outputs)
     {
         var reader = new StringReader(inputLines);
