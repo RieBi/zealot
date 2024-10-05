@@ -182,7 +182,10 @@ internal class Parser(List<Token> tokens, IRunner runner)
 
         while (IsAt(TokenKind.EqualOperator) || IsAt(TokenKind.NotEqualOperator))
         {
+            var token = Next();
+            var right = ParseComparisonOperator();
 
+            left = new BinaryEqualityOperatorNode(left, right, token.Kind);
         }
 
         return left;

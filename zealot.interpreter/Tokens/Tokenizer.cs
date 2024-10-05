@@ -36,6 +36,8 @@ internal static partial class Tokenizer
                 "<=" => TokenKind.LessThanOrEqualToOperator,
                 ">" => TokenKind.GreaterThanOperator,
                 ">=" => TokenKind.GreaterThanOrEqualToOperator,
+                "==" => TokenKind.EqualOperator,
+                "!=" => TokenKind.NotEqualOperator,
                 "!" => TokenKind.LogicalNotOperator,
                 "&&" => TokenKind.LogicalAndOperator,
                 "^" => TokenKind.LogicalExclusiveOrOperator,
