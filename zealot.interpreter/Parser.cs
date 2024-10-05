@@ -159,15 +159,44 @@ internal class Parser(List<Token> tokens, IRunner runner)
         return ParseAdditionOperator();
     }
 
-    public AbstractNode ParseLogicalOperator()
+    public AbstractNode ParseComparisonOperator()
     {
         var left = ParseLogicalNotOperator();
+
+        var at = At();
+        if (at.Kind >= TokenKind.LessThanOperator && at.Kind <= TokenKind.GreaterThanOrEqualToOperator)
+        {
+            Next();
+            var right = ParseLogicalNotOperator();
+
+            var node = new BinaryComparisonOperatorNode(left, right, at.Kind);
+            return node;
+        }
+
+        return left;
+    }
+
+    public AbstractNode ParseEqualityOperator()
+    {
+        var left = ParseComparisonOperator();
+
+        while (IsAt(TokenKind.EqualOperator) || IsAt(TokenKind.NotEqualOperator))
+        {
+
+        }
+
+        return left;
+    }
+
+    public AbstractNode ParseLogicalOperator()
+    {
+        var left = ParseEqualityOperator();
 
         while (IsAt(TokenKind.LogicalAndOperator) || IsAt(TokenKind.LogicalExclusiveOrOperator) || IsAt(TokenKind.LogicalOrOperator))
         {
             var token = Next();
 
-            var right = ParseLogicalNotOperator();
+            var right = ParseEqualityOperator();
             left = new BinaryLogicalOperatorNode(left, right, token.Kind);
         }
 

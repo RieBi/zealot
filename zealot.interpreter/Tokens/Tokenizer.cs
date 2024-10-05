@@ -33,7 +33,9 @@ internal static partial class Tokenizer
                 "\"" => TokenKind.QuotationMarks,
                 "," => TokenKind.CommaSeparator,
                 "<" => TokenKind.LessThanOperator,
+                "<=" => TokenKind.LessThanOrEqualToOperator,
                 ">" => TokenKind.GreaterThanOperator,
+                ">=" => TokenKind.GreaterThanOrEqualToOperator,
                 "!" => TokenKind.LogicalNotOperator,
                 "&&" => TokenKind.LogicalAndOperator,
                 "^" => TokenKind.LogicalExclusiveOrOperator,
@@ -67,7 +69,7 @@ internal static partial class Tokenizer
     public static bool HasNonEmptyGroup(this Match match, string groupName) => match.Groups.TryGetValue(groupName, out var group) && group.Length > 0;
 
     [GeneratedRegex(
-        @"(?<indentation>^[ \t]+)|\+=|-=|\*=|/=|\$=|=>|&&|\|\||[+\-*/$=()"",<>!^]|(?<double>[0-9]+(?:\.[0-9]+)?(?:e[-+]?[0-9]+)?)|(?<integer>[0-9]+)|(?<identifier>[a-zA-Z_][a-zA-Z0-9_\-]*)"
+        @"(?<indentation>^[ \t]+)|\+=|-=|\*=|/=|\$=|=>|&&|\|\||<=|>=|==|!=|[+\-*/$=()"",<>!^]|(?<double>[0-9]+(?:\.[0-9]+)?(?:e[-+]?[0-9]+)?)|(?<integer>[0-9]+)|(?<identifier>[a-zA-Z_][a-zA-Z0-9_\-]*)"
     )]
     private static partial Regex TokenRegex();
 }

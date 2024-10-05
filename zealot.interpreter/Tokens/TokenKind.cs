@@ -122,9 +122,29 @@ internal enum TokenKind
     LessThanOperator,
 
     /// <summary>
+    /// Represents '<=' token
+    /// </summary>
+    LessThanOrEqualToOperator,
+
+    /// <summary>
     /// Represents '>' symbol
     /// </summary>
     GreaterThanOperator,
+
+    /// <summary>
+    /// Represents '>=' token
+    /// </summary>
+    GreaterThanOrEqualToOperator,
+
+    /// <summary>
+    /// Represents '==' token
+    /// </summary>
+    EqualOperator,
+
+    /// <summary>
+    /// Represents '!=' token
+    /// </summary>
+    NotEqualOperator,
 
     /// <summary>
     /// Represents '!' symbol
