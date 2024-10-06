@@ -44,6 +44,12 @@ internal class Parser(List<Token> tokens, IRunner runner)
             var identifier = new IdentifierNode(token.Value);
             return identifier;
         }
+        else if (IsAt(TokenKind.String))
+        {
+            var token = Next();
+            var str = new ValueNode(new("string", token.Value.Substring(1, token.Value.Length - 2)));
+            return str;
+        }
         else if (IsAt(TokenKind.BreakStatement))
         {
             Next();

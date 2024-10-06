@@ -132,6 +132,11 @@ internal enum TokenKind
     QuotationMarks,
 
     /// <summary>
+    /// Represents an arbitraly long string of characters, delimited by " symbol at both ends
+    /// </summary>
+    String,
+
+    /// <summary>
     /// Represents ',' token
     /// </summary>
     CommaSeparator,

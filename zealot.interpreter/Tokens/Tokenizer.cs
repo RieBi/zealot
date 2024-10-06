@@ -50,6 +50,7 @@ internal static partial class Tokenizer
                 _ when m.HasNonEmptyGroup("integer") => TokenKind.ConstantNumberInteger,
                 _ when m.HasNonEmptyGroup("double") => TokenKind.ConstantNumberDouble,
                 _ when m.HasNonEmptyGroup("identifier") => TokenKind.Identifier,
+                _ when m.HasNonEmptyGroup("string") => TokenKind.String,
                 _ => throw new InvalidOperationException("Unidentified token inspected.")
             };
 
@@ -80,7 +81,7 @@ internal static partial class Tokenizer
     public static bool HasNonEmptyGroup(this Match match, string groupName) => match.Groups.TryGetValue(groupName, out var group) && group.Length > 0;
 
     [GeneratedRegex(
-        @"(?<indentation>^[ \t]+)|\+=|-=|\*=|/=|\$=|%=|=>|&&|\|\||<=|>=|==|!=|[+\-*/$%=()"",<>!^?:]|(?<double>[0-9]+(?:\.[0-9]+)?(?:e[-+]?[0-9]+)?)|(?<integer>[0-9]+)|(?<identifier>[a-zA-Z_][a-zA-Z0-9_\-]*)"
+        @"(?<indentation>^[ \t]+)|(?<string>"".*"")|\+=|-=|\*=|/=|\$=|%=|=>|&&|\|\||<=|>=|==|!=|[+\-*/$%=()"",<>!^?:]|(?<double>[0-9]+(?:\.[0-9]+)?(?:e[-+]?[0-9]+)?)|(?<integer>[0-9]+)|(?<identifier>[a-zA-Z_][a-zA-Z0-9_\-]*)"
     )]
     private static partial Regex TokenRegex();
 }
