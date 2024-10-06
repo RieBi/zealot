@@ -400,6 +400,63 @@ public class RunnerTests
         };
     }
 
+    public static TheoryData<string, List<string>> GetRepeatLoopData()
+    {
+        return new()
+        {
+            {
+                """
+                repeat(5) =>
+                    printn(5)
+                """,
+                ["5", "5", "5", "5", "5"]
+            },
+            {
+                """
+                define repeatFunc(outer, inner) =>
+                    repeat(outer) =>
+                        repeat(inner) =>
+                            printn(5)
+
+                repeatFunc(2, 3)
+                """,
+                ["5", "5", "5", "5", "5", "5"]
+            },
+            {
+                """
+                def num = 3
+                repeat (num >= 0) =>
+                    printn(num)
+                    num -= 1
+                """,
+                ["3", "3", "2", "1", "0"]
+            },
+            {
+                """
+                repeat (def num = 1, def num2 = 2 ? num < 10 && num2 < 10 : num += 1, num2 += 3) =>
+                    printn(num)
+                """,
+                ["1", "2", "3"]
+            },
+            {
+                """
+                repeat (def num = 0 ? num < 3) =>
+                    printn(num)
+                    num += 1
+                """,
+                ["0", "1", "2"]
+            },
+            {
+                """
+                def num = 0
+                repeat (num < 10 : num += 1, num += 2, num += 3) =>
+                    printn(num)
+                """,
+                ["0", "0", "6"]
+            }
+        };
+    }
+
     [Theory]
     [MemberData(nameof(GetBasicOperationsData))]
     [MemberData(nameof(GetVariablesData))]
@@ -430,6 +487,7 @@ public class RunnerTests
     [MemberData(nameof(GetLogicalOperatorsData))]
     [MemberData(nameof(GetRelationalOperatorsData))]
     [MemberData(nameof(GetBuiltinFunctionsData))]
+    [MemberData(nameof(GetRepeatLoopData))]
     public void BlockTestRunner(string inputLines, List<string> outputs)
     {
         var reader = new StringReader(inputLines);

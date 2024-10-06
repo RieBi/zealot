@@ -42,6 +42,8 @@ internal static partial class Tokenizer
                 "&&" => TokenKind.LogicalAndOperator,
                 "^" => TokenKind.LogicalExclusiveOrOperator,
                 "||" => TokenKind.LogicalOrOperator,
+                "?" => TokenKind.QuestionMark,
+                ":" => TokenKind.Colon,
                 _ when m.HasNonEmptyGroup("indentation") => TokenKind.Indentation,
                 _ when m.HasNonEmptyGroup("integer") => TokenKind.ConstantNumberInteger,
                 _ when m.HasNonEmptyGroup("double") => TokenKind.ConstantNumberDouble,
@@ -71,7 +73,7 @@ internal static partial class Tokenizer
     public static bool HasNonEmptyGroup(this Match match, string groupName) => match.Groups.TryGetValue(groupName, out var group) && group.Length > 0;
 
     [GeneratedRegex(
-        @"(?<indentation>^[ \t]+)|\+=|-=|\*=|/=|\$=|=>|&&|\|\||<=|>=|==|!=|[+\-*/$=()"",<>!^]|(?<double>[0-9]+(?:\.[0-9]+)?(?:e[-+]?[0-9]+)?)|(?<integer>[0-9]+)|(?<identifier>[a-zA-Z_][a-zA-Z0-9_\-]*)"
+        @"(?<indentation>^[ \t]+)|\+=|-=|\*=|/=|\$=|=>|&&|\|\||<=|>=|==|!=|[+\-*/$=()"",<>!^?:]|(?<double>[0-9]+(?:\.[0-9]+)?(?:e[-+]?[0-9]+)?)|(?<integer>[0-9]+)|(?<identifier>[a-zA-Z_][a-zA-Z0-9_\-]*)"
     )]
     private static partial Regex TokenRegex();
 }

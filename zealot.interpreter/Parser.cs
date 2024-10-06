@@ -15,7 +15,7 @@ internal class Parser(List<Token> tokens, IRunner runner)
             return new EmptyLineNode();
         else
         {
-            var result = ParseFunctionDefinition();
+            var result = ParseRepeatLoop();
             if (_pos < _tokens.Count)
                 throw new InvalidOperationException("Unused tokens detected at the end of line.");
 
@@ -206,7 +206,7 @@ internal class Parser(List<Token> tokens, IRunner runner)
         return left;
     }
 
-    public AbstractNode ParseExpression() => ParseLogicalOperator();
+    public AbstractNode ParseExpression() => ParseVariableAssignment();
 
     public AbstractNode ParseShorthandOperators()
     {
@@ -298,11 +298,81 @@ internal class Parser(List<Token> tokens, IRunner runner)
                 Expect(TokenKind.ParentheseClosed);
             }
 
+            Expect(TokenKind.BlockDefinitionOperator);
             var block = ParseScopedBlock(string.Empty);
             return new FunctionDefinitionNode(identifier.Value, parameters, block);
         }
 
         return ParseVariableAssignment();
+    }
+
+    public AbstractNode ParseRepeatLoop()
+    {
+        if (IsAt(TokenKind.RepeatDefinition))
+        {
+            Next();
+            Expect(TokenKind.ParentheseOpen);
+
+            if (IsAt(TokenKind.ParentheseClosed))
+            {
+                Next();
+                return new RepeatNode(ParseScopedBlock(string.Empty));
+            }
+            else
+            {
+                IList<AbstractNode> pre = [];
+                AbstractNode condition;
+                IList<AbstractNode> post = [];
+
+                var first = ParseExpression();
+                if (IsAt(TokenKind.QuestionMark))
+                {
+                    pre.Add(first);
+                    Next();
+                    condition = ParseExpression();
+                }
+                else if (IsAt(TokenKind.CommaSeparator))
+                {
+                    pre.Add(first);
+                    while (IsAt(TokenKind.CommaSeparator))
+                    {
+                        Next();
+                        pre.Add(ParseExpression());
+                    }
+
+                    Expect(TokenKind.QuestionMark);
+                    condition = ParseExpression();
+                }
+                else if (IsAt(TokenKind.Colon))
+                {
+                    condition = first;
+                }
+                else if (IsAt(TokenKind.ParentheseClosed))
+                {
+                    return new RepeatNode(pre, first, [], ParseScopedBlock(string.Empty));
+                }
+                else
+                    throw new InvalidOperationException("Invalid token in loop definition detected.");
+
+                if (IsAt(TokenKind.Colon))
+                {
+                    Next();
+                    post.Add(ParseExpression());
+                    
+                    while (IsAt(TokenKind.CommaSeparator))
+                    {
+                        Next();
+                        post.Add(ParseExpression());
+                    }
+                }
+
+                Expect(TokenKind.ParentheseClosed);
+                Expect(TokenKind.BlockDefinitionOperator);
+                return new RepeatNode(pre, condition, post, ParseScopedBlock(string.Empty));
+            }
+        }
+
+        return ParseFunctionDefinition();
     }
 
     public ScopedBlockNode ParseScopedBlock(string indentation)

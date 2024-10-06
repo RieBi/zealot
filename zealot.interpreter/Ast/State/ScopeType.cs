@@ -2,5 +2,6 @@
 internal enum ScopeType
 {
     Global,
-    Function
+    Function,
+    Loop
 }
