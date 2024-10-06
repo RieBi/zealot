@@ -18,6 +18,19 @@ internal class Scope(ScopeType kind)
         ParentScope = parentScope;
     }
 
+    public static Scope CreateGlobal()
+    {
+        var scope = new Scope(ScopeType.Global);
+        foreach (var funcInfo in BuiltinFunctions.Functions)
+        {
+            var functionNode = new ExternalFunctionNode(funcInfo.function);
+            var definition = new FunctionDefinitionNode(funcInfo.name, funcInfo.parameters, functionNode);
+            scope.DefineFunction(definition);
+        }
+
+        return scope;
+    }
+
     public void DefineVariable(string identifier, TypeInfo value, bool replaceExisting = false)
     {
         if (HasFunctionScopedVariable(identifier, out var containingScope) && (containingScope != this || !replaceExisting))
@@ -36,6 +49,11 @@ internal class Scope(ScopeType kind)
             throw new InvalidOperationException($"Cannot redefine a variable {identifier}: it does not exist.");
 
         scope.DefineVariable(identifier, value, true);
+    }
+
+    public IList<TypeInfo> GetAllOwnValues()
+    {
+        return _variables.Select(f => f.Value).ToList();
     }
 
     /// <summary>

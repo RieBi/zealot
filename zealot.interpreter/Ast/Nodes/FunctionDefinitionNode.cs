@@ -2,11 +2,11 @@
 using Zealot.Interpreter.Ast.Types;
 
 namespace Zealot.Interpreter.Ast.Nodes;
-internal class FunctionDefinitionNode(string identifier, IList<string> parameterIdentifiers, ScopedBlockNode body) : AbstractNode
+internal class FunctionDefinitionNode(string identifier, IList<string> parameterIdentifiers, AbstractNode body) : AbstractNode
 {
     public string Identifier { get; set; } = identifier;
     public IList<string> ParameterIdentifiers { get; set; } = parameterIdentifiers;
-    public ScopedBlockNode Body { get; set; } = body;
+    public AbstractNode Body { get; set; } = body;
 
     public override TypeInfo Evaluate(Scope scope)
     {

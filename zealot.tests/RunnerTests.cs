@@ -384,6 +384,18 @@ public class RunnerTests
                 writeNewLines()
                 """,
                 ["1", "2", "3"]
+            },
+            {
+                """
+                define writeExpressions =>
+                    printn(true)
+                    printn(false)
+                    printn(true || false)
+                    printn(2 + 2 * 2)
+
+                writeExpressions()
+                """,
+                ["true", "false", "true", "6"]
             }
         };
     }

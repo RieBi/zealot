@@ -4,7 +4,7 @@ using Zealot.Interpreter.Tokens;
 namespace Zealot.Interpreter;
 public class Interpreter
 {
-    private readonly Scope _internalScope = new(ScopeType.Global);
+    private readonly Scope _internalScope = Scope.CreateGlobal();
 
     /// <summary>
     /// Interprets the <paramref name="line"/> of code and returns returned result, if any.
