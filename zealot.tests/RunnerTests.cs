@@ -457,6 +457,93 @@ public class RunnerTests
         };
     }
 
+    public static TheoryData<string, List<string>> GetIfElseData()
+    {
+        return new()
+        {
+            {
+                """
+                if (true) =>
+                    printn(1)
+                """,
+                ["1"]
+            },
+            {
+                """
+                if (false) =>
+                    printn(1)
+                """,
+                []
+            },
+            {
+                """
+                if (true) =>
+                    printn(true)
+                else =>
+                    printn(false)
+                """,
+                ["true"]
+            },
+            {
+                """
+                if (false) =>
+                    printn(true)
+                else =>
+                    printn(false)
+                """,
+                ["false"]
+            },
+            {
+                """
+                def num = 1
+                if (num == 0) =>
+                    printn(0)
+                elseif (num == 1) =>
+                    printn(1)
+                else =>
+                    printn(2)
+                """,
+                ["1", "1"]
+            },
+            {
+                """
+                def num = 2
+                if (num == 0) =>
+                    printn(0)
+                elseif (num == 1) =>
+                    printn(1)
+                else =>
+                    printn(2)
+                """,
+                ["2", "2"]
+            },
+            {
+                """
+                def num = 0
+                if (num == 0) =>
+                    printn(0)
+                elseif (num == 1) =>
+                    printn(1)
+                else =>
+                    printn(2)
+                """,
+                ["0", "0"]
+            },
+            {
+                """
+                def num = 3
+                if (num == 1) =>
+                    printn(11)
+                elseif (num == 2) =>
+                    printn(22)
+                elseif (num == 3) =>
+                    printn(33)
+                """,
+                ["3", "33"]
+            }
+        };
+    }
+
     [Theory]
     [MemberData(nameof(GetBasicOperationsData))]
     [MemberData(nameof(GetVariablesData))]
@@ -488,6 +575,7 @@ public class RunnerTests
     [MemberData(nameof(GetRelationalOperatorsData))]
     [MemberData(nameof(GetBuiltinFunctionsData))]
     [MemberData(nameof(GetRepeatLoopData))]
+    [MemberData(nameof(GetIfElseData))]
     public void BlockTestRunner(string inputLines, List<string> outputs)
     {
         var reader = new StringReader(inputLines);
