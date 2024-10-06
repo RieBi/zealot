@@ -359,6 +359,35 @@ public class RunnerTests
         };
     }
 
+    public static TheoryData<string, List<string>> GetBuiltinFunctionsData()
+    {
+        return new()
+        {
+            {
+                """
+                define writeThings =>
+                    print(1)
+                    print(2)
+                    print(3)
+
+                writeThings()
+                """,
+                ["123"]
+            },
+            {
+                """
+                define writeNewLines =>
+                    printn(1)
+                    printn(2)
+                    printn(3)
+
+                writeNewLines()
+                """,
+                ["1", "2", "3"]
+            }
+        };
+    }
+
     [Theory]
     [MemberData(nameof(GetBasicOperationsData))]
     [MemberData(nameof(GetVariablesData))]
@@ -388,6 +417,7 @@ public class RunnerTests
     [MemberData(nameof(GetShorthandOperatorsData))]
     [MemberData(nameof(GetLogicalOperatorsData))]
     [MemberData(nameof(GetRelationalOperatorsData))]
+    [MemberData(nameof(GetBuiltinFunctionsData))]
     public void BlockTestRunner(string inputLines, List<string> outputs)
     {
         var reader = new StringReader(inputLines);
