@@ -2,27 +2,27 @@
 internal enum TokenKind
 {
     /// <summary>
-    /// Represents keyword 'def'
+    /// Represents 'def' token
     /// </summary>
     VariableDefinition,
 
     /// <summary>
-    /// Represents keyword 'define'
+    /// Represents 'define' token
     /// </summary>
     FunctionDefinition,
 
     /// <summary>
-    /// Represents keyword 'repeat'
+    /// Represents 'repeat' token
     /// </summary>
     RepeatDefinition,
 
     /// <summary>
-    /// Represents keyword '=>'
+    /// Represents '=>' token
     /// </summary>
     BlockDefinitionOperator,
 
     /// <summary>
-    /// Represents '=' symbol
+    /// Represents '=' token
     /// </summary>
     AssignmentOperator,
 
@@ -37,52 +37,52 @@ internal enum TokenKind
     ConstantNumberDouble,
 
     /// <summary>
-    /// Represents a keyword 'false'
+    /// Represents 'false' token
     /// </summary>
     ConstantFalse,
 
     /// <summary>
-    /// Represents a keyword 'true'
+    /// Represents 'true' token
     /// </summary>
     ConstantTrue,
 
     /// <summary>
-    /// Represents '+' symbol
+    /// Represents '+' token
     /// </summary>
     AdditionOperator,
 
     /// <summary>
-    /// Represents '+=' keyword
+    /// Represents '+=' token
     /// </summary>
     ShortAdditionOperator,
 
     /// <summary>
-    /// Represents '-' symbol
+    /// Represents '-' token
     /// </summary>
     SubtractionOperator,
 
     /// <summary>
-    /// Represents '-=' keyword
+    /// Represents '-=' token
     /// </summary>
     ShortSubtractionOperator,
 
     /// <summary>
-    /// Represents '*' symbol
+    /// Represents '*' token
     /// </summary>
     MultiplicationOperator,
 
     /// <summary>
-    /// Represents '*=' keyword
+    /// Represents '*=' token
     /// </summary>
     ShortMultiplicationOperator,
 
     /// <summary>
-    /// Represents '/' symbol
+    /// Represents '/' token
     /// </summary>
     DivisionOperator,
 
     /// <summary>
-    /// Represents '/=' keyword
+    /// Represents '/=' token
     /// </summary>
     ShortDivisionOperator,
 
@@ -97,37 +97,37 @@ internal enum TokenKind
     ShortModuloOperator,
 
     /// <summary>
-    /// Represents '$' symbol
+    /// Represents '$' token
     /// </summary>
     ExponentiationOperator,
 
     /// <summary>
-    /// Represents '$=' keyword
+    /// Represents '$=' token
     /// </summary>
     ShortExponentiationOperator,
 
     /// <summary>
-    /// Represents '(' symbol
+    /// Represents '(' token
     /// </summary>
     ParentheseOpen,
 
     /// <summary>
-    /// Represents ')' symbol
+    /// Represents ')' token
     /// </summary>
     ParentheseClosed,
 
     /// <summary>
-    /// Represents '"' symbol
+    /// Represents '"' token
     /// </summary>
     QuotationMarks,
 
     /// <summary>
-    /// Represents ',' symbol
+    /// Represents ',' token
     /// </summary>
     CommaSeparator,
 
     /// <summary>
-    /// Represents '<' symbol
+    /// Represents '<' token
     /// </summary>
     LessThanOperator,
 
@@ -137,7 +137,7 @@ internal enum TokenKind
     LessThanOrEqualToOperator,
 
     /// <summary>
-    /// Represents '>' symbol
+    /// Represents '>' token
     /// </summary>
     GreaterThanOperator,
 
@@ -157,7 +157,7 @@ internal enum TokenKind
     NotEqualOperator,
 
     /// <summary>
-    /// Represents '!' symbol
+    /// Represents '!' token
     /// </summary>
     LogicalNotOperator,
 
