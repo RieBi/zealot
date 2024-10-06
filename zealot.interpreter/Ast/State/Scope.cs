@@ -9,6 +9,8 @@ internal class Scope(ScopeType kind)
 
     public ScopeType Kind { get; set; } = kind;
 
+    public ScopeFlag Flags { get; set; } = 0;
+
     private readonly Dictionary<string, TypeInfo> _variables = [];
 
     private readonly Dictionary<string, FunctionDefinitionNode> _functions = [];

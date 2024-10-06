@@ -12,7 +12,11 @@ internal class ScopedBlockNode(IList<AbstractNode> statements) : AbstractNode
             throw new InvalidOperationException("Cannot execute a block of 0 statements.");
 
         for (int i = 0; i < Statements.Count - 1; i++)
+        {
             Statements[i].Evaluate(scope);
+            if (scope.Flags != ScopeFlag.None)
+                return new("empty", new());
+        }
 
         if (scope.Kind == ScopeType.Function)
             return Statements[^1].Evaluate(scope);

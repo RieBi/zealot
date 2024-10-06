@@ -65,6 +65,8 @@ internal static partial class Tokenizer
                     "if" => TokenKind.IfStatement,
                     "elseif" => TokenKind.ElseIfStatement,
                     "else" => TokenKind.ElseStatement,
+                    "break" => TokenKind.BreakStatement,
+                    "continue" => TokenKind.ContinueStatement,
                     _ => tokenKind
                 };
             }

@@ -17,6 +17,16 @@ internal enum TokenKind
     RepeatDefinition,
 
     /// <summary>
+    /// Represents 'break' token
+    /// </summary>
+    BreakStatement,
+
+    /// <summary>
+    /// Represents 'continue' token
+    /// </summary>
+    ContinueStatement,
+
+    /// <summary>
     /// Represents '=>' token
     /// </summary>
     BlockDefinitionOperator,

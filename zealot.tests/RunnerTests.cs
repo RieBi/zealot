@@ -433,6 +433,7 @@ public class RunnerTests
     {
         return new()
         {
+            // Basic ones
             {
                 """
                 repeat(5) =>
@@ -482,6 +483,71 @@ public class RunnerTests
                     printn(num)
                 """,
                 ["0", "0", "6"]
+            },
+            // With break
+            {
+                """
+                def num = 0
+                repeat =>
+                    printn(num)
+                    if (num >= 2) =>
+                        break
+                    num += 1
+                """,
+                ["0", "0", "1", "2"]
+            },
+            {
+                """
+                repeat(200) =>
+                    break
+                    printn(0)
+                """,
+                []
+            },
+            {
+                """
+                define printMoreThan5Twice(num) =>
+                    repeat(2) =>
+                        if (num <= 5) =>
+                            break
+                        else =>
+                            printn(num)
+
+                repeat(def i = 0 ? i <= 7 : i += 1) =>
+                    printMoreThan5Twice(i)
+                """,
+                ["6", "6", "7", "7"]
+            },
+            // With continue
+            {
+                """
+                repeat (def i = 0 ? i < 10 : i += 1) =>
+                    if (i % 2 == 0) =>
+                        continue
+                    printn(i)
+                """,
+                ["1", "3", "5", "7", "9"]
+            },
+            {
+                """
+                repeat(20) =>
+                    continue
+                    printn(111)
+                """,
+                []
+            },
+            {
+                """
+                define f(num) =>
+                    repeat(3) =>
+                        printn(num)
+                        repeat(20) =>
+                            continue
+                            printn(666)
+                repeat(def i = 0 ? i < 2 : i += 1) =>
+                    f(i)
+                """,
+                ["0", "0", "0", "1", "1", "1"]
             }
         };
     }

@@ -10,6 +10,7 @@ internal class RepeatNode : AbstractNode
     public AbstractNode Body { get; set; }
 
     private static int counter = 0;
+    private const ScopeFlag repeatMap = ScopeFlag.Continue | ScopeFlag.Break;
 
     public RepeatNode(AbstractNode body)
     {
@@ -65,7 +66,22 @@ internal class RepeatNode : AbstractNode
             var iterationCountInt = (int)iterationCountDouble;
 
             for (int i = 0; i < iterationCountInt; i++)
+            {
                 Body.Evaluate(loopScope);
+                if ((loopScope.Flags & repeatMap) > 0)
+                {
+                    if ((loopScope.Flags & ScopeFlag.Continue) > 0)
+                    {
+                        loopScope.Flags ^= ScopeFlag.Continue;
+                        continue;
+                    }
+                    else if ((loopScope.Flags & ScopeFlag.Break) > 0)
+                    {
+                        loopScope.Flags ^= ScopeFlag.Break;
+                        break;
+                    }
+                }
+            }
         }
         else if (conditionValue.Name == "bool")
         {
@@ -74,6 +90,20 @@ internal class RepeatNode : AbstractNode
             while (going)
             {
                 Body.Evaluate(loopScope);
+
+                if ((loopScope.Flags & repeatMap) > 0)
+                {
+                    if ((loopScope.Flags & ScopeFlag.Continue) > 0)
+                    {
+                        loopScope.Flags ^= ScopeFlag.Continue;
+                    }
+                    else if ((loopScope.Flags & ScopeFlag.Break) > 0)
+                    {
+                        loopScope.Flags ^= ScopeFlag.Break;
+                        break;
+                    }
+                }
+
                 for (int i = 0; i < AfterStatements.Count; i++)
                     AfterStatements[i].Evaluate(loopScope);
 

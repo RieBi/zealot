@@ -1,4 +1,5 @@
 ﻿using Zealot.Interpreter.Ast.Nodes;
+using Zealot.Interpreter.Ast.State;
 using Zealot.Interpreter.Ast.Types;
 using Zealot.Interpreter.Tokens;
 
@@ -43,8 +44,18 @@ internal class Parser(List<Token> tokens, IRunner runner)
             var identifier = new IdentifierNode(token.Value);
             return identifier;
         }
+        else if (IsAt(TokenKind.BreakStatement))
+        {
+            Next();
+            return new RepeatInterventionNode(ScopeFlag.Break);
+        }
+        else if (IsAt(TokenKind.ContinueStatement))
+        {
+            Next();
+            return new RepeatInterventionNode(ScopeFlag.Continue);
+        }
         
-        throw new InvalidOperationException("Invalid basic expression detected.");
+            throw new InvalidOperationException("Invalid basic expression detected.");
     }
 
     public AbstractNode ParseFunctionCall()
@@ -231,7 +242,7 @@ internal class Parser(List<Token> tokens, IRunner runner)
                 return left;
 
             Next();
-
+            
             var operatorNode = new BinaryArithmeticOperatorNode(left, ParseExpression(), binaryOperator.Value);
             return new AssignmentStatementNode(identifier, operatorNode);
         }
@@ -312,6 +323,13 @@ internal class Parser(List<Token> tokens, IRunner runner)
         if (IsAt(TokenKind.RepeatDefinition))
         {
             Next();
+
+            if (IsAt(TokenKind.BlockDefinitionOperator))
+            {
+                Next();
+                return new RepeatNode(ParseScopedBlock(string.Empty));
+            }
+
             Expect(TokenKind.ParentheseOpen);
 
             if (IsAt(TokenKind.ParentheseClosed))
@@ -392,6 +410,9 @@ internal class Parser(List<Token> tokens, IRunner runner)
             IList<(AbstractNode condition, ScopedBlockNode body)> ifelses = [];
 
             Reset(_runner.GetNextLine());
+            if (IsAt(TokenKind.Indentation))
+                Next();
+
             while (IsAt(TokenKind.ElseIfStatement))
             {
                 Next();
@@ -405,6 +426,8 @@ internal class Parser(List<Token> tokens, IRunner runner)
 
                 ifelses.Add((elseifCondition, elseifBody));
                 Reset(_runner.GetNextLine());
+                if (IsAt(TokenKind.Indentation))
+                    Next();
             }
 
             AbstractNode? elseBody = null;
@@ -416,7 +439,10 @@ internal class Parser(List<Token> tokens, IRunner runner)
                 elseBody = ParseScopedBlock(string.Empty);
             }
             else
+            {
                 _runner.ReturnPreviousLine();
+                _pos = int.MaxValue;
+            }
 
             return new IfelseNode((ifCondition, ifBody), ifelses, elseBody);
         }
