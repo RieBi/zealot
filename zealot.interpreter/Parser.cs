@@ -120,7 +120,7 @@ internal class Parser(List<Token> tokens, IRunner runner)
     {
         AbstractNode left = ParseUnaryMinus();
 
-        while (IsAt(TokenKind.MultiplicationOperator) || IsAt(TokenKind.DivisionOperator))
+        while (IsAt(TokenKind.MultiplicationOperator) || IsAt(TokenKind.DivisionOperator) || IsAt(TokenKind.ModuloOperator))
         {
             var token = Next();
 
@@ -222,6 +222,7 @@ internal class Parser(List<Token> tokens, IRunner runner)
                 TokenKind.ShortSubtractionOperator => TokenKind.SubtractionOperator,
                 TokenKind.ShortMultiplicationOperator => TokenKind.MultiplicationOperator,
                 TokenKind.ShortDivisionOperator => TokenKind.DivisionOperator,
+                TokenKind.ShortModuloOperator => TokenKind.ModuloOperator,
                 TokenKind.ShortExponentiationOperator => TokenKind.ExponentiationOperator,
                 _ => null
             };

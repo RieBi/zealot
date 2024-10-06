@@ -26,6 +26,7 @@ internal class BinaryArithmeticOperatorNode(AbstractNode left, AbstractNode righ
             TokenKind.SubtractionOperator => leftNum - rightNum,
             TokenKind.MultiplicationOperator => leftNum * rightNum,
             TokenKind.DivisionOperator => leftNum / rightNum,
+            TokenKind.ModuloOperator => leftNum % rightNum,
             TokenKind.ExponentiationOperator => Math.Pow(leftNum, rightNum),
             _ => throw new InvalidOperationException($"Unknown binary operator detected: {OperatorKind}.")
         };

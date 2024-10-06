@@ -87,6 +87,16 @@ internal enum TokenKind
     ShortDivisionOperator,
 
     /// <summary>
+    /// Represents '%' token
+    /// </summary>
+    ModuloOperator,
+
+    /// <summary>
+    /// Represents '%=' token
+    /// </summary>
+    ShortModuloOperator,
+
+    /// <summary>
     /// Represents '$' symbol
     /// </summary>
     ExponentiationOperator,

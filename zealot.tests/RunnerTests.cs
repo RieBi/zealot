@@ -55,7 +55,7 @@ public class RunnerTests
                 ["-2 - -2"],
                 ["0"]
             },
-            // Multiplication, division
+            // Multiplication, division, modulo
             {
                 ["2 + 2 * 2"],
                 ["6"]
@@ -67,6 +67,26 @@ public class RunnerTests
             {
                 ["1/2"],
                 ["0.5"]
+            },
+            {
+                ["5 % 1"],
+                ["0"]
+            },
+            {
+                ["5 % 2"],
+                ["1"]
+            },
+            {
+                ["5 % 3"],
+                ["2"]
+            },
+            {
+                ["5 % 4"],
+                ["1"]
+            },
+            {
+                ["5 % 5"],
+                ["0"]
             },
             // Exponentiation
             {
@@ -228,6 +248,15 @@ public class RunnerTests
                 a $= 3
                 """,
                 ["5", "6", "5", "25", "5", "125"]
+            },
+            {
+                """
+                def a = 5
+                a %= 2
+                def b = 5
+                b %= 3
+                """,
+                ["5", "1", "5", "2"]
             }
         };
     }
