@@ -15,7 +15,7 @@ internal class Parser(List<Token> tokens, IRunner runner)
             return new EmptyLineNode();
         else
         {
-            var result = ParseRepeatLoop();
+            var result = ParseIfElseStatement();
             if (_pos < _tokens.Count)
                 throw new InvalidOperationException("Unused tokens detected at the end of line.");
 
@@ -373,6 +373,54 @@ internal class Parser(List<Token> tokens, IRunner runner)
         }
 
         return ParseFunctionDefinition();
+    }
+
+    public AbstractNode ParseIfElseStatement()
+    {
+        if (IsAt(TokenKind.IfStatement))
+        {
+            Next();
+            Expect(TokenKind.ParentheseOpen);
+
+            var ifCondition = ParseExpression();
+            Expect(TokenKind.ParentheseClosed);
+
+            Expect(TokenKind.BlockDefinitionOperator);
+            var ifBody = ParseScopedBlock(string.Empty);
+
+            IList<(AbstractNode condition, ScopedBlockNode body)> ifelses = [];
+
+            Reset(_runner.GetNextLine());
+            while (IsAt(TokenKind.ElseIfStatement))
+            {
+                Next();
+                Expect(TokenKind.ParentheseOpen);
+
+                var elseifCondition = ParseExpression();
+                Expect(TokenKind.ParentheseClosed);
+
+                Expect(TokenKind.BlockDefinitionOperator);
+                var elseifBody = ParseScopedBlock(string.Empty);
+
+                ifelses.Add((elseifCondition, elseifBody));
+                Reset(_runner.GetNextLine());
+            }
+
+            AbstractNode? elseBody = null;
+            if (IsAt(TokenKind.ElseStatement))
+            {
+                Next();
+
+                Expect(TokenKind.BlockDefinitionOperator);
+                elseBody = ParseScopedBlock(string.Empty);
+            }
+            else
+                _runner.ReturnPreviousLine();
+
+            return new IfelseNode((ifCondition, ifBody), ifelses, elseBody);
+        }
+
+        return ParseRepeatLoop();
     }
 
     public ScopedBlockNode ParseScopedBlock(string indentation)

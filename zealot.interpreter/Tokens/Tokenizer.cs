@@ -60,6 +60,9 @@ internal static partial class Tokenizer
                     "repeat" => TokenKind.RepeatDefinition,
                     "false" => TokenKind.ConstantFalse,
                     "true" => TokenKind.ConstantTrue,
+                    "if" => TokenKind.IfStatement,
+                    "elseif" => TokenKind.ElseIfStatement,
+                    "else" => TokenKind.ElseStatement,
                     _ => tokenKind
                 };
             }

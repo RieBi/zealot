@@ -177,6 +177,21 @@ internal enum TokenKind
     Colon,
 
     /// <summary>
+    /// Represents 'if' token
+    /// </summary>
+    IfStatement,
+
+    /// <summary>
+    /// Represents 'elseif' token
+    /// </summary>
+    ElseIfStatement,
+
+    /// <summary>
+    /// Represents 'else' token
+    /// </summary>
+    ElseStatement,
+
+    /// <summary>
     /// Represents an identifier for a variable or function, consisting of A-Za-z0-9_- symbols. Can only start with a letter or underscore
     /// </summary>
     Identifier,
